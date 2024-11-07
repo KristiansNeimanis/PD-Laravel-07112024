@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index');
+        return view('posts.index', ['posts' => $posts]);
     }
 
     /**
@@ -29,10 +29,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
+        $data = $request->validate([
             'title' => $request->title,
             'content' => $request->content
-        ];
+        ]);
 
         Post::create($data);
 
@@ -42,11 +42,12 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show($id)
     {
+        $post = Post::find($id);
         return view('posts.show', ['post' => $post]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -81,5 +82,5 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->delete();
         return redirect('/posts');
-    }    
+    }
 }
